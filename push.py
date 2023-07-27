@@ -1,17 +1,26 @@
-import requests
 import json
 
+import requests
+from loguru import logger
 
-def pushplus(content,token,template='markdown'):
+
+@logger.catch()
+def pushplus(content, token, template='markdown'):
     title = '腾讯视频签到提醒'
-    url = 'http://www.pushplus.plus/send'
+    url = 'http://www.pushplus.plus/send/'
     data = {
         "token": token,
         "title": title,
         "content": content,
-        "template":"markdown"
+        "template": "markdown"
     }
     body = json.dumps(data).encode(encoding='utf-8')
     headers = {'Content-Type': 'application/json'}
     response = requests.post(url, data=body, headers=headers)
-    return response
+    content = response.text
+    loads = json.loads(content)
+    if loads['code'] != 200:
+        logger.error("PUSHPLUS_TOKEN:" + loads['msg'])
+    else:
+        logger.info(title+":消息发送成功-"+loads['msg'])
+        return loads
