@@ -6,4 +6,3 @@ PUSH_OR_NOR = False
 
 # PUSHPLUS的TOKEN
 PUSHPLUS_TOKEN = ''
-
