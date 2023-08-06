@@ -120,14 +120,14 @@ def tencent_video_auto_sign(uId):
 
     # requests.get('https://sc.ftqq.com/自己的sever酱号.send?text=' + quote('签到积分：' + str(rsp_score)))
 
-
     if config.push.PUSH_OR_NOR:
         push.pushplus(log, config.push.PUSHPLUS_TOKEN)
     return log
 
+
 def tencent_video_get_look(auth_cookies):
     # 观看
-    look_url= 'https://vip.video.qq.com/rpc/trpc.new_task_system.task_system.TaskSystem/ProvideAward?rpc_data=%7B%22task_id%22:1%7D'
+    look_url = 'https://vip.video.qq.com/rpc/trpc.new_task_system.task_system.TaskSystem/ProvideAward?rpc_data=%7B%22task_id%22:1%7D'
     look_headers = {
         'user-agent': 'Mozilla/5.0 (Linux; Android 11; M2104K10AC Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 MQQBrowser/6.2 TBS/046237 Mobile Safari/537.36 QQLiveBrowser/8.7.85.27058',
         'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ def tencent_video_get_look(auth_cookies):
     response_2 = requests.get(look_url, headers=look_headers)
     try:
         res_2 = json.loads(response_2.text)
-        log ="\n观看获得v力值:" + str(res_2['provide_value'])
+        log = "\n观看获得v力值:" + str(res_2['provide_value'])
         logger.debug(f"v力值响应内容：{res_2}")
         logger.info(log)
         return log
@@ -154,6 +154,7 @@ def tencent_video_get_look(auth_cookies):
             logger.exception(e)
             return log
 
+
 def tencent_video_task_status(auth_cookies):
     # 任务状态
     task_url = 'https://vip.video.qq.com/rpc/trpc.new_task_system.task_system.TaskSystem/ReadTaskList?rpc_data=%7B%22business_id%22:%221%22,%22platform%22:3%7D'
@@ -162,7 +163,7 @@ def tencent_video_task_status(auth_cookies):
         'Content-Type': 'application/json',
         'referer': 'https://film.video.qq.com/x/vip-center/?entry=common&hidetitlebar=1&aid=V0%24%241%3A0%242%3A8%243%3A8.7.85.27058%244%3A3%245%3A%246%3A%247%3A%248%3A4%249%3A%2410%3A&isDarkMode=0',
         'cookie': auth_cookies
-        }
+    }
     response = requests.get(url=task_url, headers=task_headers)
     try:
         res = json.loads(response.text)
@@ -174,7 +175,7 @@ def tencent_video_task_status(auth_cookies):
                 log = log + '\n标题:' + i["task_maintitle"] + '\n状态:' + i["task_subtitle"]
         return log
     except Exception as e:
-        log =  "获取状态异常，可能是cookie失效"
+        log = "获取状态异常，可能是cookie失效"
         logger.warning(log)
         logger.exception(e)
         return log
@@ -194,7 +195,7 @@ def tencent_video_get_score(auth_cookies):
     try:
         qq_nick = re.search(r"qq_nick=([^\n;]*);", auth_cookies).group(1)
         res_3 = json.loads(score_resp.text)
-        log = log +"\n用户："+qq_nick+ "\n会员等级:" + str(res_3['lscore_info']['level']) + "\n积分:" + str(
+        log = log + "\n用户：" + qq_nick + "\n会员等级:" + str(res_3['lscore_info']['level']) + "\n积分:" + str(
             res_3['cscore_info']['vip_score_total']) + "\nV力值:" + str(res_3['lscore_info']['score'])
         return log
     except Exception as e:
@@ -211,11 +212,10 @@ def tencent_video_get_score(auth_cookies):
             return log
 
 
-
 def tencent_video_get_vip_info(uId):
     auth_cookies = get_cookies(uId)
-    log=tencent_video_get_score(auth_cookies)
-    log_status=tencent_video_task_status(auth_cookies)+tencent_video_get_look(auth_cookies)
+    log = tencent_video_get_score(auth_cookies)
+    log_status = tencent_video_task_status(auth_cookies) + tencent_video_get_look(auth_cookies)
     get_vip_info_url_payload = get_account_cookie_by_uId(uId).get_vip_info_url_payload
     vip_info_headers = {
         'Accept': '*/*',
@@ -240,29 +240,30 @@ def tencent_video_get_vip_info(uId):
         logger.debug("获取会员信息状态：" + vip_info_rsp.text)
         try:
             res_3 = json.loads(vip_info_rsp.text)
-            log = log+"\n开始时间:" + str(res_3['beginTime']) + "\n到期时间:" + str(
+            log = log + "\n开始时间:" + str(res_3['beginTime']) + "\n到期时间:" + str(
                 res_3['endTime'])
             if res_3['endmsg'] != '':
                 log = log + '\nendmsg:' + res_3['endmsg']
-            log+=log_status
+            log += log_status
             logger.info(log)
             return log
         except Exception as e:
             try:
                 res_3 = json.loads(vip_info_rsp.text)
-                log = log+"\n腾讯视频领获取积分异常,返回内容:\n" + str(res_3)
+                log = log + "\n腾讯视频领获取积分异常,返回内容:\n" + str(res_3)
                 log += log_status
                 logger.warning(log)
                 logger.exception(e)
                 return log
             except Exception as e:
-                log = log+"\n腾讯视频获取积分异常,无法返回内容"
-                log+=log_status
+                log = log + "\n腾讯视频获取积分异常,无法返回内容"
+                log += log_status
                 logger.warning(log)
                 logger.exception(e)
                 return log
         finally:
-            pass
+            if config.push.PUSH_OR_NOR:
+                push.pushplus(log, config.push.PUSHPLUS_TOKEN)
             # Config.save_config(config)
     else:
         logger.error("获取会员信息响应失败")
