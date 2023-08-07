@@ -7,7 +7,7 @@
 
 
 ## 🥗使用说明
-- 配置`config.cfg`配置文件中的  LOGIN_COOKIE 、LOGIN_URL、 LOGIN_URL_PAYLOADLOAD、PUSHPLUS_TOKEN、GET_VIP_INFO_URL_PAYLOAD参数。
+- 配置`config.cfg`配置文件中的  LOGIN_COOKIE 、LOGIN_URL、 LOGIN_URL_PAYLOADLOAD、PUSHPLUS_TOKEN、GET_VIP_INFO_URL_PAYLOAD几个参数，调用方法即可使用。
 - 提供三个个方法：
   - tencent_video_auto_sign("uId")：自动签到函数
   - tencent_video_get_vip_info("uId")：查询会员信息
