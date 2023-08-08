@@ -5,8 +5,8 @@ from loguru import logger
 
 
 @logger.catch()
-def pushplus(content, token, template='txt'):
-    title = '腾讯视频签到提醒'
+def pushplus(token, title='Notifications', content='', template='txt'):
+    title = title
     url = 'http://www.pushplus.plus/send/'
     data = {
         "token": token,
@@ -22,5 +22,5 @@ def pushplus(content, token, template='txt'):
     if loads['code'] != 200:
         logger.error("PUSHPLUS_TOKEN:" + loads['msg'])
     else:
-        logger.info(title+":消息发送成功-"+loads['msg'])
+        logger.info(title + ":消息发送成功-" + loads['msg'])
         return loads

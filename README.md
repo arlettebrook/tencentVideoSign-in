@@ -6,14 +6,25 @@
 
 
 
-## 🥗使用说明
-- 配置`config.cfg`配置文件中的  LOGIN_COOKIE 、LOGIN_URL、 LOGIN_URL_PAYLOADLOAD、PUSHPLUS_TOKEN、GET_VIP_INFO_URL_PAYLOAD几个参数，调用方法即可使用。
-- 提供三个个方法：
-  - tencent_video_auto_sign("uId")：自动签到函数
-  - tencent_video_get_vip_info("uId")：查询会员信息
+## 🥗腾讯视频使用说明
+- 配置`config.cfg`配置文件中的  LOGIN_COOKIE 、LOGIN_URL、 LOGIN_URL_PAYLOADLOAD、PUSHPLUS_TOKEN、GET_VIP_INFO_URL_PAYLOAD几个参数，对象调用方法即可使用。
+- TencentVideo对象提供三个方法：
+  - tencent_video_auto_sign()：自动签到函数
+  - tencent_video_get_vip_info()：查询会员信息
     - 这个方法还会领取一小时V力值任务【前提已完成，否则为0】
     - uId为不同用户标识，配置文件中自定义
 
+
+---
+
+
+
+## 🧶爱奇艺使用说明
+
+- 配置`config.cfg`配置文件中的 `iqy_login_cookie`,对象掉方法既可以使用。
+- IQY对象提供三个方法：
+  - get_user_info():获取爱奇艺会员信息
+  - get_rewards():领取已完成的每日任务
 
 ---
 
@@ -36,6 +47,7 @@
 > 注意：如果报错没有通过图像验证，需要在cookie中加入vdevice_qimei36='...'[使用常用手机打开获取](https://m.v.qq.com/schemerul)
 
 7. `GET_VIP_INFO_URL_PAYLOAD`[同样方法获取该链接的请求体](https://vip.video.qq.com/rpc/trpc.query_vipinfo.vipinfo.QueryVipInfo/GetVipUserInfoH5)
+7. 爱奇艺的iqy_login_cookie同理，扫码登录[爱奇艺](https://iqyi.com)官网之后，点击[链接](http://serv.vip.iqiyi.com/vipgrowth/query.action)进入控制台查看cookie
 
 ---
 

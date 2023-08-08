@@ -1,12 +1,19 @@
 from loguru import logger
 
-from tencent import tencent_video_get_vip_info, tencent_video_auto_sign
+from config import Config
+from iqiyi import IQY
 
 
 def main():
     logger.info("主程序启动了")
-    # tencent_video_auto_sign("root")
-    tencent_video_get_vip_info("root")
+    config = Config.load_config()
+    # tencent_video = TencentVideo('root', config)
+    # tencent_video.tencent_video_get_vip_info()
+    # tencent_video.tencent_video_auto_sign()
+
+    iqy = IQY('root', config)
+    iqy.get_user_info()
+    iqy.get_rewards()
 
 
 if __name__ == '__main__':
