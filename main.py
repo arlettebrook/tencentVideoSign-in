@@ -1,3 +1,5 @@
+import time
+
 from loguru import logger
 
 from config import Config
@@ -12,9 +14,11 @@ def main():
     # tencent_video.tencent_video_auto_sign()
 
     iqy = IQY('root', config)
-    iqy.get_user_info()
-    iqy.get_rewards()
 
+    iqy.get_rewards()
+    # iqy.sign_in()
+    time.sleep(3)
+    iqy.get_user_info()
 
 if __name__ == '__main__':
     main()

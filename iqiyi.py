@@ -83,7 +83,7 @@ class IQY:
             logger.error(msg)
         logger.info(msg)
         if self.config.push.PUSH_OR_NOR:
-            push.pushplus(self.config.push.PUSHPLUS_TOKEN,title='爱奇艺会员信息通知',content=msg)
+            push.pushplus(self.config.push.PUSHPLUS_TOKEN, title='爱奇艺会员信息通知', content=msg)
         return msg
 
     def sign_in(self):
@@ -160,6 +160,6 @@ class IQY:
                     self.growthTask += item["taskReward"]
         msg = f"+{self.growthTask}成长值"
         logger.info(msg)
-        if self.config.push.PUSH_OR_NOR:
-            push.pushplus(self.config.push.PUSHPLUS_TOKEN,title='爱奇艺领取通知',content=msg)
+        # if self.config.push.PUSH_OR_NOR:
+        #     push.pushplus(self.config.push.PUSHPLUS_TOKEN,title='爱奇艺领取通知',content=msg)
         return msg
