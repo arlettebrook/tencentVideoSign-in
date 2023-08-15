@@ -14,6 +14,7 @@ class TencentVideo:
     def __init__(self, uId, config):
         self.uId = uId
         self.config = config
+        self.account = self.get_account_cookie_by_uId()
 
     def get_account_cookie_by_uId(self):
         for account in self.config.login_cookie_list.accounts:
@@ -40,10 +41,9 @@ class TencentVideo:
         return cookie_dict
 
     def tencent_video_login(self):
-        account = self.get_account_cookie_by_uId()
-        login_cookie = account.login_cookie
-        login_url_payload = account.login_url_payload
-        login_url = account.login_url
+        login_cookie = self.account.login_cookie
+        login_url_payload = self.account.login_url_payload
+        login_url = self.account.login_url
         login_headers = {
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -118,8 +118,8 @@ class TencentVideo:
 
         # requests.get('https://sc.ftqq.com/自己的sever酱号.send?text=' + quote('签到积分：' + str(rsp_score)))
 
-        if self.config.push.PUSH_OR_NOR:
-            push.pushplus(self.config.push.PUSHPLUS_TOKEN, title='腾讯视频签到提醒', content=log)
+        if self.account.PUSH_STATUS:
+            push.pushplus(self.account.PUSHPLUS_TOKEN, title='腾讯视频签到提醒', content=log)
         return log
 
     @staticmethod
@@ -259,7 +259,7 @@ class TencentVideo:
                     logger.exception(e)
                     return log
             finally:
-                if self.config.push.PUSH_OR_NOR:
-                    push.pushplus(self.config.push.PUSHPLUS_TOKEN, title='腾讯视频签到提醒', content=log)
+                if self.account.PUSH_STATUS:
+                    push.pushplus(self.account.PUSHPLUS_TOKEN, title='腾讯视频签到提醒', content=log)
         else:
             logger.error("获取会员信息响应失败")
