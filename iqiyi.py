@@ -41,8 +41,11 @@ class IQY:
         }
         self.user_agent = UserAgent().chrome
 
-        self.P00001 = re.search(r"P00001=(.*?);", self.iqy_cookie).group(1)
-        self.dfp = re.search(r'__dfp=(.*?)@', self.iqy_cookie).group(1)
+        try:
+            self.P00001 = re.search(r"P00001=(.*?);", self.iqy_cookie).group(1)
+            self.dfp = re.search(r'__dfp=(.*?)@', self.iqy_cookie).group(1)
+        except Exception as e:
+            logger.error(e)
         self.session = Session()
         self.headers = {
             "User-Agent": self.user_agent,
@@ -149,7 +152,7 @@ class IQY:
             info = f"签到执行成功, {data['data']['msg']}"
             logger.success(info)
             if self.account.PUSH_STATUS:
-                push.pushplus(self.account.PUSHPLUS_TOKEN, title="爱奇艺签到通知", content="info")
+                push.pushplus(self.account.PUSHPLUS_TOKEN, title="爱奇艺签到通知", content=info)
         else:
             logger.error("签到失败，原因可能是签到接口又又又又改了")
 

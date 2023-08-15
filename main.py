@@ -15,7 +15,7 @@ def main():
     # tencent_video.tencent_video_auto_sign()
 
     iqy = IQY('root', config)
-    
+
     iqy.check_in()
 
     iqy.get_rewards()
