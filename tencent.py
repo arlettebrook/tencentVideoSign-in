@@ -80,7 +80,7 @@ class TencentVideo:
         login_rsp = self.tencent_video_login()
         login_cookie_dict.update(login_rsp.cookies.get_dict())
         auth_cookie = "; ".join([f"{key}={value}" for key, value in login_cookie_dict.items()])
-        logger.info('auth_cookie:' + auth_cookie)
+        logger.debug('auth_cookie:' + auth_cookie)
         # 更新cookie
         self.get_account_cookie_by_uId().login_cookie = json.dumps(auth_cookie)
         return auth_cookie
@@ -99,7 +99,7 @@ class TencentVideo:
         }
         sign_rsp = requests.get(url=sign_in_url, headers=sign_headers)
 
-        logger.debug("签到响应内容：" + sign_rsp.text)
+        logger.info("签到响应内容：" + sign_rsp.text)
 
         sign_rsp_json = sign_rsp.json()
 
@@ -114,7 +114,7 @@ class TencentVideo:
         else:
             log = sign_rsp_json['msg']
             logger.error(log)
-        logger.debug('签到状态：' + log)
+        logger.info('签到状态：' + log)
 
         # requests.get('https://sc.ftqq.com/自己的sever酱号.send?text=' + quote('签到积分：' + str(rsp_score)))
 
@@ -136,7 +136,7 @@ class TencentVideo:
         try:
             res_2 = json.loads(response_2.text)
             log = "\n观看获得v力值:" + str(res_2['provide_value'])
-            logger.debug(f"v力值响应内容：{res_2}")
+            logger.info(f"v力值响应内容：{res_2}")
             logger.info(log)
             return log
         except Exception as e:
@@ -165,7 +165,7 @@ class TencentVideo:
         response = requests.get(url=task_url, headers=task_headers)
         try:
             res = json.loads(response.text)
-            logger.debug(f"任务状态详细内容：{res}")
+            logger.info(f"任务状态详细内容：{res}")
             lis = res["task_list"]
             log = '\n============v力值任务完成状态============'
             for i in lis:

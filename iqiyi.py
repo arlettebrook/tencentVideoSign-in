@@ -146,11 +146,22 @@ class IQY:
                 "verticalCode": "iQIYI"
             }
         }
+        info = 'null'
         data = self.req(url, "post", body)
         logger.debug(f'签到返回信息：{data}')
         if data.get('code') == 'A00000':
-            info = f"签到执行成功, {data['data']['msg']}"
-            logger.success(info)
+            try:
+                msg = data['data']['msg']
+                # msg为None表示成功执行
+                if msg:
+                    info = f"签到执行成功, {msg}"
+                else:
+                    signDays = data['data']['data']['signDays']
+                    rewardCount = data['data']['data']['rewards'][0]['rewardCount']
+                    info = f"签到执行成功, +{rewardCount}签到成长值,已连续签到{signDays}天。"
+                logger.success(info)
+            except Exception as e:
+                logger.error(e)
             if self.account.PUSH_STATUS:
                 push.pushplus(self.account.PUSHPLUS_TOKEN, title="爱奇艺签到通知", content=info)
         else:
@@ -259,7 +270,7 @@ class IQY:
             logger.info(f"正在执行{item['name']}...")
             res = self.req(url=join_task_url, body=params)
             if res['code'] == 'A00000':
-                logger.debug(f"加入任务{item['name']}响应:{res}")
+                logger.info(f"加入任务{item['name']}响应:{res}")
                 sleep(11)
                 logger.info(f"加入任务{item['name']}状态：{res}")
             else:
@@ -269,7 +280,7 @@ class IQY:
             url = f'https://tc.vip.iqiyi.com/taskCenter/task/notify?taskCode={item["taskCode"]}&P00001={self.P00001}&platform=97ae2982356f69d8&lang=cn&bizSource=component_browse_timing_tasks&_={self.timestamp()}'
             if res := self.req(url)['code'] == 'A00000':
                 sleep(2)
-                logger.debug(f"完成任务{item['name']}响应：{res}")
+                logger.info(f"完成任务{item['name']}响应：{res}")
 
     def get_rewards(self):
         # 获取任务奖励
@@ -281,13 +292,13 @@ class IQY:
             "lang": "zh_CN"
         }
         self.join_task()
-        logger.debug(f'可完成的任务：{self.task_list}')
+        logger.info(f'可完成的任务：{self.task_list}')
         # 遍历任务，领取奖励
         for item in self.task_list:
             params["taskCode"] = item["taskCode"]
             res = self.req(url=rewards_url, body=params)
             sleep(1)
-            logger.debug(f"领取任务{item['name']}状态:{res}")
+            logger.info(f"领取任务{item['name']}状态:{res}")
             if res["code"] == "A00000":
                 try:
                     self.growthTask += int(res['data'][0]['成长值'][1])

@@ -1,10 +1,7 @@
-import time
-
 from loguru import logger
 
 from config import Config
 from iqiyi import IQY
-from tencent import TencentVideo
 
 
 def main():
@@ -18,11 +15,10 @@ def main():
 
     iqy.check_in()
 
-    iqy.get_rewards()
+    # iqy.get_rewards()
 
     # time.sleep(3)
-    iqy.get_user_info()
-
+    # iqy.get_user_info()
 
 
 if __name__ == '__main__':
