@@ -97,9 +97,10 @@ class IQY:
         if data.get("code") == 'A00000':
             self.uid = data['data']['userinfo']['pru']
         else:
-            logger.warning("请求api失败 最大可能是cookie失效了 也可能是网络问题")
+            info = f"请求api失败 最大可能是cookie失效了 也可能是网络问题:getUid响应:{data}"
+            logger.error(info)
             if self.account.PUSH_STATUS:
-                push.pushplus(self.config.push.PUSHPLUS_TOKEN, content="爱奇艺每日任务: 请求api失败 最大可能是cookie失效了 也可能是网络问题")
+                push.pushplus(self.config.push.PUSHPLUS_TOKEN, content="爱奇艺每日任务:" + info)
             exit(-1)
 
     @staticmethod
@@ -152,6 +153,7 @@ class IQY:
         if data.get('code') == 'A00000':
             try:
                 msg = data['data']['msg']
+                logger.debug(f"msg类型：{type(msg)}")
                 # msg为None表示成功执行
                 if msg:
                     info = f"签到执行成功, {msg}"
