@@ -98,7 +98,7 @@ class Tieba:
             content = check_in_rsp.json()
             if content['error_code'] == '0':
                 logger.success(f"执行{item['forum_name']}签到成功")
-                num = + 1
+                num += 1
             else:
                 logger.warning(f"执行{item['forum_name']}签到失败，失败消息：{content}")
 
