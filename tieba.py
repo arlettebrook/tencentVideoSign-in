@@ -36,7 +36,6 @@ class Tieba:
                 return account
         logger.info(f"用户{self.tId}不存在")
         logger.error("加载cookie配置文件错误")
-        exit(-1)
 
     @logger.catch
     def _get_tbs(self):
@@ -51,7 +50,6 @@ class Tieba:
             return content['tbs']
         else:
             logger.error('获取tbs失败，用户未登录成功。')
-            exit(-1)
 
     @logger.catch
     # 获取用户所关注的贴吧列表

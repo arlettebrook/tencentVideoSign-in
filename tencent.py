@@ -22,7 +22,6 @@ class TencentVideo:
                 return account
         logger.info(f"用户{self.uId}不存在")
         logger.error("加载cookie配置文件错误")
-        exit(-1)
 
     def load_cookie_dict_from_str(self):
         cookie_dict = {}
@@ -73,7 +72,6 @@ class TencentVideo:
                 logger.error("登录失败：" + login_rsp.text)
         except Exception as e:
             logger.exception(f"可能是请求出错：{e}")
-            exit(-1)
 
     def get_cookies(self):
         login_cookie_dict = self.load_cookie_dict_from_str()

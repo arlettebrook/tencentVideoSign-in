@@ -61,7 +61,6 @@ class IQY:
                 return account
         logger.info(f"用户{self.yId}不存在")
         logger.error("加载cookie配置文件错误")
-        exit(-1)
 
     def req(self, url, req_method="GET", body=None):
         data = {}
@@ -101,7 +100,6 @@ class IQY:
             logger.error(info)
             if self.account.PUSH_STATUS:
                 push.pushplus(self.config.push.PUSHPLUS_TOKEN, content="爱奇艺每日任务:" + info)
-            exit(-1)
 
     @staticmethod
     def timestamp(short=False):
@@ -130,7 +128,6 @@ class IQY:
         self.getUid()
         if self.uid == "":
             logger.error("获取用户id失败 可能为cookie设置错误或者网络异常,请重试或者检查cookie")
-            exit(0)
         data = f'agentType=1|agentversion=1|appKey=basic_pcw|authCookie={self.P00001}|qyid={self.qyid}|task_code=natural_month_sign|timestamp={time_stamp}|typeCode=point|userId={self.uid}|UKobMjDMsDoScuWOfp6F'
         url = f'https://community.iqiyi.com/openApi/task/execute?agentType=1&agentversion=1&appKey=basic_pcw&authCookie={self.P00001}&qyid={self.qyid}&sign={self.md5(data)}&task_code=natural_month_sign&timestamp={time_stamp}&typeCode=point&userId={self.uid}'
         return url
@@ -168,6 +165,7 @@ class IQY:
                 push.pushplus(self.account.PUSHPLUS_TOKEN, title="爱奇艺签到通知", content=info)
         else:
             logger.error("签到失败，原因可能是签到接口又又又又改了")
+            return f'签到返回信息：{data}'
 
     def _get_account_cookie_by_uId(self):
         for account in self.config.iqy_login_cookie_list.accounts:
@@ -175,7 +173,6 @@ class IQY:
                 return account
         logger.info(f"用户{self.yId}不存在")
         logger.error("加载cookie配置文件错误")
-        exit(-1)
 
     def get_user_info(self):
         user_info_url = "http://serv.vip.iqiyi.com/vipgrowth/query.action"
