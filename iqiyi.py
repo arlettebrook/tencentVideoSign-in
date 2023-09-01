@@ -45,7 +45,7 @@ class IQY:
             self.P00001 = re.search(r"P00001=(.*?);", self.iqy_cookie).group(1)
             self.dfp = re.search(r'__dfp=(.*?)@', self.iqy_cookie).group(1)
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
         self.session = Session()
         self.headers = {
             "User-Agent": self.user_agent,
@@ -69,7 +69,7 @@ class IQY:
                 data = self.session.get(url, headers=self.headers, params=body).json()
             except Exception as e:
                 logger.error("请求发送失败,可能为网络异常")
-                logger.error(e)
+                logger.exception(e)
             #     data = self.session.get(url, headers=self.headers, params=body).text
             return data
         elif req_method.upper() == "POST":
@@ -77,7 +77,7 @@ class IQY:
                 data = self.session.post(url, headers=self.headers, data=json.dumps(body)).json()
             except Exception as e:
                 logger.error("请求发送失败,可能为网络异常")
-                logger.error(e)
+                logger.exception(e)
             #     data = self.session.post(url, headers=self.headers, data=dumps(body)).text
             return data
         elif req_method.upper() == "OTHER":
@@ -85,7 +85,7 @@ class IQY:
                 self.session.get(url, headers=self.headers, params=json.dumps(body))
             except Exception as e:
                 logger.error("请求发送失败,可能为网络异常")
-                logger.error(e)
+                logger.exception(e)
         else:
             logger.error("您当前使用的请求方式有误,请检查")
 
@@ -160,7 +160,7 @@ class IQY:
                     info = f"签到执行成功, +{rewardCount}签到成长值,已连续签到{signDays}天。"
                 logger.success(info)
             except Exception as e:
-                logger.error(e)
+                logger.exception(e)
             if self.account.PUSH_STATUS:
                 push.pushplus(self.account.PUSHPLUS_TOKEN, title="爱奇艺签到通知", content=info)
         else:
@@ -210,7 +210,7 @@ class IQY:
                 logger.success("爱奇艺获取会员信息成功")
             except Exception as e:
                 logger.warning(resp_json)
-                logger.error(e)
+                logger.exception(e)
         else:
             msg = '爱奇艺获取会员信息失败：' + str(resp_json)
             logger.error(msg)
@@ -302,7 +302,7 @@ class IQY:
                 try:
                     self.growthTask += int(res['data'][0]['成长值'][1])
                 except Exception as e:
-                    logger.warning(e)
+                    logger.exception(e)
                     pass
         msg = f"+{self.growthTask}任务成长值"
         logger.info(msg)
