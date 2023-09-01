@@ -45,6 +45,7 @@ class IQY:
             self.P00001 = re.search(r"P00001=(.*?);", self.iqy_cookie).group(1)
             self.dfp = re.search(r'__dfp=(.*?)@', self.iqy_cookie).group(1)
         except Exception as e:
+            logger.error(f'cookie获取失败，请重新配置！-{e}')
             logger.exception(e)
         self.session = Session()
         self.headers = {
