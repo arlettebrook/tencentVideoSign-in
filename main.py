@@ -1,7 +1,6 @@
 from loguru import logger
 
 from config import Config
-from iqiyi import IQY
 from tieba import Tieba
 
 
@@ -21,7 +20,7 @@ def main():
     # time.sleep(3)
     # iqy.get_user_info()
 
-    tieBa = Tieba('root',config)
+    tieBa = Tieba('root', config)
     tieBa.check_in()
 
 
