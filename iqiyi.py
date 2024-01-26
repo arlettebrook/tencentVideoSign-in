@@ -154,19 +154,21 @@ class IQY:
                 logger.debug(f"msg类型：{type(msg)}")
                 # msg为None表示成功执行
                 if msg:
-                    info = f"签到执行成功, {msg}"
+                    info = f"\n签到执行成功, {msg}"
                 else:
                     signDays = data['data']['data']['signDays']
                     rewardCount = data['data']['data']['rewards'][0]['rewardCount']
-                    info = f"签到执行成功, +{rewardCount}签到成长值,已连续签到{signDays}天。"
+                    info = f"\n签到执行成功, +{rewardCount}签到成长值,已连续签到{signDays}天。"
                 logger.success(info)
             except Exception as e:
                 logger.exception(e)
             if self.account.PUSH_STATUS:
                 push.pushplus(self.account.PUSHPLUS_TOKEN, title="爱奇艺签到通知", content=info)
+
+            return info
         else:
             logger.error("签到失败，原因可能是签到接口又又又又改了")
-            return f'签到返回信息：{data}'
+            return f'\n签到返回信息签到失败，原因可能是签到接口又又又又改了：{data}'
 
     def _get_account_cookie_by_uId(self):
         for account in self.config.iqy_login_cookie_list.accounts:
@@ -305,7 +307,7 @@ class IQY:
                 except Exception as e:
                     logger.exception(e)
                     pass
-        msg = f"+{self.growthTask}任务成长值"
+        msg = f"\n+{self.growthTask}任务成长值"
         logger.info(msg)
         if self.account.PUSH_STATUS:
             push.pushplus(self.account.PUSHPLUS_TOKEN, title='爱奇艺领取通知', content=msg)
