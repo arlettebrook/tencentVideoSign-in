@@ -1,5 +1,4 @@
 import json
-import os
 import re
 import time
 from hashlib import md5
@@ -8,12 +7,25 @@ from urllib.parse import unquote
 from uuid import uuid4
 
 import requests
+from loguru import logger
 
 
+class IQY2:
+    def __init__(self, yId, config):
+        self.yId = yId
+        self.config = config
+        self.account = self._get_account_cookie_by_uId()
+        self.iqy_cookie = self.account.iqy_login_cookie
 
-
-class IQIYI():
     name = "爱奇艺"
+
+    def _get_account_cookie_by_uId(self):
+        for account in self.config.iqy_login_cookie_list.accounts:
+            if account.yId == self.yId:
+                return account
+        logger.info(f"用户{self.yId}不存在")
+        logger.error("加载cookie配置文件错误")
+
     @staticmethod
     def parse_cookie(cookie):
         p00001 = (
@@ -428,7 +440,7 @@ class IQIYI():
 
     def main(self):
         p00001, p00002, p00003, dfp, qyid = self.parse_cookie(
-            os.getenv("IQY_COOKIE")
+            self.iqy_cookie
         )
         try:
             user_info = json.loads(unquote(p00002, encoding="utf-8"))
@@ -471,25 +483,20 @@ class IQIYI():
         user_msg = self.user_information(p00001=p00001)
 
         msg = (
-            [
-                {"name": "用户账号", "value": user_name},
-                {"name": "用户昵称", "value": nickname},
-            ]
-            + user_msg
-            + sign_msg
-            + [
-                task_msg,
-                {"name": "抽奖奖励", "value": draw_msg},
-            ]
-            + [watch_msg]
-            + lottery_msgs
-            + level_right_msg
-            + lotto_lottery_msg
+                [
+                    {"name": "用户账号", "value": user_name},
+                    {"name": "用户昵称", "value": nickname},
+                ]
+                + user_msg
+                + sign_msg
+                + [
+                    task_msg,
+                    {"name": "抽奖奖励", "value": draw_msg},
+                ]
+                + [watch_msg]
+                + lottery_msgs
+                + level_right_msg
+                + lotto_lottery_msg
         )
         msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
         return msg
-
-
-if __name__ == "__main__":
-
-    print(IQIYI().main())

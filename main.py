@@ -4,6 +4,7 @@ from loguru import logger
 
 from config import Config
 from iqiyi import IQY
+from iqiyi2 import IQY2
 from tieba import Tieba
 
 
@@ -14,15 +15,8 @@ def main():
     # tencent_video.tencent_video_get_vip_info()
     # tencent_video.tencent_video_auto_sign()
 
-    iqy = IQY('root', config)
-
-    checkInfo=iqy.check_in()
-
-    checkInfo2=iqy.get_rewards()
-
-    time.sleep(3)
-    checkInfo3=iqy.get_user_info()
-    logger.success(checkInfo+checkInfo2+checkInfo3)
+    iqy = IQY2('root', config)
+    logger.success(iqy.main())
 
 
     # tieBa = Tieba('root', config)
